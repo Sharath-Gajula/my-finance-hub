@@ -1,12 +1,27 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState, useEffect } from 'react';
+import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
+import { DashboardGrid } from '@/components/dashboard/DashboardGrid';
+import { AddWidgetModal } from '@/components/dashboard/AddWidgetModal';
+import { useDashboardStore } from '@/store/dashboardStore';
 
 const Index = () => {
+  const [showAddModal, setShowAddModal] = useState(false);
+  const isDarkMode = useDashboardStore((s) => s.isDarkMode);
+  
+  // Apply dark mode on mount
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkMode]);
+  
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen flex flex-col bg-background">
+      <DashboardHeader onAddWidget={() => setShowAddModal(true)} />
+      <DashboardGrid onAddWidget={() => setShowAddModal(true)} />
+      <AddWidgetModal open={showAddModal} onOpenChange={setShowAddModal} />
     </div>
   );
 };
